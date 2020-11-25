@@ -74,7 +74,23 @@ exports.update = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
-    res.send('delete');
+    const query = { _id: req.params.transactionId, user_id: res.locals.decoded._id }
+
+    Transaction.findOneAndDelete(query)
+        .then(data => {
+
+            Transaction.find({ user_id: res.locals.decoded._id })
+                .then(data => {
+                    res.send({
+                        status: true,
+                        data: data,
+                        msg: "Transaction added successfully"
+                    });
+                })
+                .catch(err => transactionError(err, res));
+
+        })
+        .catch(err => transactionError(err, res))
 }
 
 function transactionError(err, res) {

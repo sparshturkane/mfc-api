@@ -11,7 +11,7 @@ router.post('/', auth, transactionValidationRules(), validateTransaction, Transa
 
 router.patch('/:transactionId', auth, transactionValidationRules(), validateTransaction, TransactionController.update);
 
-router.delete('/:transactionId', auth, transactionValidationRules(), validateTransaction, TransactionController.delete);
+router.delete('/:transactionId', auth, TransactionController.delete);
 
 
 module.exports = router;
