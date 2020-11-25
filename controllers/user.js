@@ -59,5 +59,54 @@ exports.register = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-    res.send('login');
+    User.findOne({ email: req.body.email })
+        .then((data) => {
+            if (data) {
+                console.log(data);
+                var verifyPassword = bcrypt.compareSync(req.body.password, data.password);
+
+                if (verifyPassword) {
+
+                    const token = jwt.sign(
+                        {
+                            email: data.name,
+                            email: data.email
+                        },
+                        process.env.JWT_SECRET,
+                        {
+                            expiresIn: "1d"
+                        }
+                    );
+
+                    res.send({
+                        status: true,
+                        data: {
+                            name: data.name,
+                            email: data.email,
+                            authorizartion: token,
+                        },
+                        msg: "Success"
+                    })
+
+
+                } else {
+                    res.send({
+                        status: false,
+                        error: "invalid password",
+                        msg: "Invalid Email or Password",
+                    });
+                }
+            } else {
+                res.send({
+                    status: false,
+                    error: "invalid password",
+                    msg: "Invalid Email or Password",
+                });
+            }
+
+        })
+        .catch((err) => {
+            console.log(err);
+            res.send({ status: false, error: err, msg: "Find user failed" })
+        })
 }
