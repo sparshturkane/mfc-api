@@ -46,7 +46,7 @@ exports.update = (req, res, next) => {
     // Validate Data
     // find and update where (user_id == _id) && transaction._id == id
     // console.log(req.params.transactionId);
-    const query = { _id: req.params.transactionId }
+    const query = { _id: req.params.transactionId, user_id: res.locals.decoded._id }
     const update = {
         "$set": {
             customerName: req.body.customerName,
