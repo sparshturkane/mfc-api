@@ -9,9 +9,9 @@ router.get('/', auth, TransactionController.list);
 
 router.post('/', auth, transactionValidationRules(), validateTransaction, TransactionController.create);
 
-router.patch('/:id', auth, TransactionController.update);
+router.patch('/:transactionId', auth, transactionValidationRules(), validateTransaction, TransactionController.update);
 
-router.delete('/:id', auth, TransactionController.delete);
+router.delete('/:transactionId', auth, transactionValidationRules(), validateTransaction, TransactionController.delete);
 
 
 module.exports = router;

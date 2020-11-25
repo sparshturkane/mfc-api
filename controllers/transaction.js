@@ -1,7 +1,16 @@
 const Transaction = require('../models/transaction');
 
 exports.list = (req, res, next) => {
-    res.send('list txn')
+
+    Transaction.find({ user_id: res.locals.decoded._id })
+        .then(data => {
+            res.send({
+                status: true,
+                data: data,
+                msg: "Transaction fetched successfully"
+            });
+        })
+        .catch(err => transactionError(err, res));
 }
 
 exports.create = (req, res, next) => {
@@ -33,7 +42,34 @@ exports.create = (req, res, next) => {
 }
 
 exports.update = (req, res, next) => {
-    res.send('update');
+    // Auth
+    // Validate Data
+    // find and update where (user_id == _id) && transaction._id == id
+    // console.log(req.params.transactionId);
+    const query = { _id: req.params.transactionId }
+    const update = {
+        "$set": {
+            customerName: req.body.customerName,
+            amount: req.body.amount,
+            description: req.body.description,
+            type: req.body.type,
+        }
+    };
+    Transaction.findOneAndUpdate(query, update)
+        .then(data => {
+
+            Transaction.find({ user_id: res.locals.decoded._id })
+                .then(data => {
+                    res.send({
+                        status: true,
+                        data: data,
+                        msg: "Transaction added successfully"
+                    });
+                })
+                .catch(err => transactionError(err, res));
+
+        })
+        .catch(err => transactionError(err, res))
 }
 
 exports.delete = (req, res, next) => {
