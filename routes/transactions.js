@@ -1,25 +1,19 @@
 var express = require('express');
 var router = express.Router();
 
+const TransactionController = require('../controllers/transaction');
+
 // Read transactions
-router.get('/', function (req, res, next) {
-    res.send('read');
-});
+router.get('/', TransactionController.list);
 
 // Create Transactions
-router.post('/', function (req, res, next) {
-    res.send('create');
-});
+router.post('/', TransactionController.create);
 
 // Update Transactions
-router.patch('/:id', function (req, res, next) {
-    res.send('update');
-});
+router.patch('/:id', TransactionController.update);
 
 // Delete Transactions
-router.delete('/:id', function (req, res, next) {
-    res.send('delete');
-});
+router.delete('/:id', TransactionController.delete);
 
 
 module.exports = router;
