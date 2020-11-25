@@ -17,7 +17,7 @@ exports.create = (req, res, next) => {
     transaction.save()
         .then((data) => {
 
-            Transaction.findById({ user_id: res.locals.decoded._id })
+            Transaction.find({ user_id: res.locals.decoded._id })
                 .then(data => {
                     res.send({
                         status: true,
@@ -25,11 +25,11 @@ exports.create = (req, res, next) => {
                         msg: "Transaction added successfully"
                     });
                 })
-                .catch(err => transactionError(err));
+                .catch(err => transactionError(err, res));
 
 
         })
-        .catch(err => transactionError(err))
+        .catch(err => transactionError(err, res))
 }
 
 exports.update = (req, res, next) => {
@@ -40,7 +40,7 @@ exports.delete = (req, res, next) => {
     res.send('delete');
 }
 
-function transactionError(err) {
+function transactionError(err, res) {
     res.send({
         status: false,
         error: err,
