@@ -55,7 +55,8 @@ exports.update = (req, res, next) => {
             type: req.body.type,
         }
     };
-    Transaction.findOneAndUpdate(query, update)
+    const options = { returnNewDocument: true, useFindAndModify: false };
+    Transaction.findOneAndUpdate(query, update, options)
         .then(data => {
 
             Transaction.find({ user_id: res.locals.decoded._id })
