@@ -2,18 +2,16 @@ var express = require('express');
 var router = express.Router();
 
 const TransactionController = require('../controllers/transaction');
+const { auth } = require('../middlewares/login_validation');
+const { transactionValidationRules, validateTransaction } = require('../middlewares/request_validation');
 
-// Read transactions
-router.get('/', TransactionController.list);
+router.get('/', auth, TransactionController.list);
 
-// Create Transactions
-router.post('/', TransactionController.create);
+router.post('/', auth, transactionValidationRules(), validateTransaction, TransactionController.create);
 
-// Update Transactions
-router.patch('/:id', TransactionController.update);
+router.patch('/:id', auth, TransactionController.update);
 
-// Delete Transactions
-router.delete('/:id', TransactionController.delete);
+router.delete('/:id', auth, TransactionController.delete);
 
 
 module.exports = router;
